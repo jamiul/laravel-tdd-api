@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // get all todo-list from TodoListController
 Route::get('/todo-list', [TodoListController::class, 'index'])->name('todo-list.index');
+Route::get('/todo-list/{todo}', [TodoListController::class, 'show'])->name('todo-list.show');

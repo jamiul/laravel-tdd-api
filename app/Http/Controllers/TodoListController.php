@@ -12,4 +12,9 @@ class TodoListController extends Controller
         $todos = TodoList::all();
         return response()->json($todos);
     }
+
+    public function show(TodoList $todo)
+    {
+        return response()->json([$todo]);
+    }
 }
