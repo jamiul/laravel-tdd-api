@@ -21,7 +21,12 @@ class TodoListController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
         $todo = TodoList::create($request->all());
+
         return $todo;
     }
 }
