@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -15,37 +16,29 @@ class TodoListController extends Controller
         return response()->json($todos);
     }
 
-    public function show(TodoList $todo)
+    public function show(TodoList $todo_list)
     {
-        return response()->json([$todo]);
+        return response($todo_list);
     }
 
-    public function store(Request $request)
+    public function store(TodoListRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-        ]);
-
         $todo = TodoList::create($request->all());
 
         return $todo;
     }
 
-    public function destroy(TodoList $todo)
+    public function destroy(TodoList $todo_list)
     {
-        $todo->delete();
+        $todo_list->delete();
 
         return response('', Response::HTTP_NO_CONTENT);
     }
 
-    public function update(Request $request, TodoList $todo)
+    public function update(TodoListRequest $request, TodoList $todo_list)
     {
-        $request->validate([
-            'name' => ['required']
-        ]);
+        $todo_list->update($request->all());
 
-        $todo->update($request->all());
-
-        return response($todo);
+        return response($todo_list);
     }
 }

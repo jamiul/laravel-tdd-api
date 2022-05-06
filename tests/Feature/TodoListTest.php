@@ -17,9 +17,7 @@ class TodoListTest extends TestCase
     {
         parent::setUp();
 
-        $this->todo =  TodoList::factory()->create([
-            'name' => 'Todo 1',
-        ]);
+        $this->todo =  $this->createTodo();
     }
 
     public function test_get_todo_list()
@@ -39,11 +37,13 @@ class TodoListTest extends TestCase
         // preparation
 
         // action
-        $response = $this->getJson(route('todo-list.show', $this->todo->id));
+        $response = $this->getJson(route('todo-list.show', $this->todo->id))
+            ->assertOk()
+            ->json();
+
 
         // assertion
-        $response->assertStatus(200);
-        $this->assertEquals($response->json()[0]['name'], $this->todo->name);
+        $this->assertEquals($response['name'], $this->todo->name);
     }
 
     public function test_store_new_todo()
@@ -80,10 +80,13 @@ class TodoListTest extends TestCase
 
     public function test_update_todo()
     {
-        $this->patchJson(route('todo-list.update', $this->todo->id), ['name' => 'updated todo lsit'])
+        $this->patchJson(route('todo-list.update', $this->todo->id), ['name' => 'updated todo list'])
             ->assertOk();
 
-        $this->assertDatabaseHas('todo_lists', ['name' => $this->todo->name]);
+        $this->assertDatabaseHas('todo_lists', [
+            'id' => $this->todo->id,
+            'name' => 'updated todo list'
+        ]);
     }
 
     public function test_todo_name_field_required_while_updating()
