@@ -24,10 +24,8 @@ abstract class TestCase extends BaseTestCase
         ]);
     }
 
-    public function createTask($arg = [])
+    public function createTask($args = [])
     {
-        return Task::factory()->create([
-            'title' => $arg['title'] ?? 'My best task',
-        ]);
+        return Task::factory()->create($args);
     }
 }

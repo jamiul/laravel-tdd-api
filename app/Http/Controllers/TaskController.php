@@ -3,23 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TodoList;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(TodoList $todo_list)
     {
-        $task = Task::all();
-
-        return response($task);
+        $tasks = Task::where(['todo_list_id' => $todo_list->id])->get();
+        return response($tasks);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, TodoList $todo_list)
     {
-        $task = Task::create($request->all());
-
-        return response($task);
+        return $todo_list->tasks()->create($request->all());
     }
 
     /**
